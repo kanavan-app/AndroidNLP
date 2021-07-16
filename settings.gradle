@@ -1,2 +1,3 @@
+include ':androidnlp'
 include ':app'
 rootProject.name = "AndroidNLP"
