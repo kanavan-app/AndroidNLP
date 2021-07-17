@@ -1,9 +1,7 @@
 package com.kanavan.androidnlp;
 
-import java.util.Arrays;
-
 public class Vector implements IVector {
-    public final int size;
+    private final int size;
     private final double[] data;
 
     public Vector(int size) {
@@ -11,20 +9,58 @@ public class Vector implements IVector {
         this.data = new double[this.size];
     }
 
-    public Vector(int size, double defaultValue) {
+    public Vector(int size, double value) {
         this.size = size;
-        this.data = new double[this.size];
-        Arrays.fill(this.data, defaultValue);
+        this.data = this.fill(size, value);
     }
 
-    public Vector(int size, double[] data) {
+    public Vector(int size, double[] source) {
         this.size = size;
-        this.data = data.clone();
+        this.data = this.copy(size, source);
+    }
+
+    public int length() {
+        return this.size;
+    }
+
+    private double[] fill(int size, double value) {
+        double[] filledData = new double[size];
+        for (int i = 0; i < size; i++) {
+            filledData[i] = value;
+        }
+        return filledData;
+    }
+
+    private double[] copy(int size, double[] source) {
+        double[] copiedData = new double[size];
+        for (int i = 0; i < size; i++) {
+            copiedData[i] = source[i];
+        }
+        return copiedData;
+    }
+
+    public static IVector copy(int size, IVector source) {
+        IVector copiedData = new Vector(size);
+        for (int i = 0; i < size; i++) {
+            copiedData.set(i, source.get(i));
+        }
+        return copiedData;
+    }
+
+    private String join(int size, double[] source, char delimiter) {
+        StringBuilder joinedString = new StringBuilder();
+        for (int i = 0; i < size; i++) {
+            joinedString.append(source[i]);
+            if (i < size - 1) {
+                joinedString.append(delimiter);
+            }
+        }
+        return joinedString.toString();
     }
 
     @Override
     public String toString() {
-        return Arrays.toString(this.data);
+        return '[' + this.join(this.size, this.data, ',') + ']';
     }
 
     @Override
@@ -38,8 +74,8 @@ public class Vector implements IVector {
     }
 
     @Override
-    public IVector add(Vector that) {
-        Vector vector = new Vector(this.size);
+    public IVector add(IVector that) {
+        IVector vector = new Vector(this.size);
         for (int i = 0; i < this.size; i++) {
             vector.set(i, this.data[i] + that.get(i));
         }
@@ -66,8 +102,8 @@ public class Vector implements IVector {
 
     @Override
     public IVector subVector(int start, int end) {
-        Vector vector = new Vector(end - start + 1);
-        for (int i = 0; i < vector.size; i++) {
+        IVector vector = new Vector(end - start + 1);
+        for (int i = 0; i < vector.length(); i++) {
             vector.set(i, this.data[start + i]);
         }
         return vector;

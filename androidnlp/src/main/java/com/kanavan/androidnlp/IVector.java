@@ -1,13 +1,15 @@
 package com.kanavan.androidnlp;
 
 public interface IVector {
+    int length();
+
     String toString();
 
     void set(int position, double value);
 
     double get(int position);
 
-    IVector add(Vector that);
+    IVector add(IVector that);
 
     double sum();
 
