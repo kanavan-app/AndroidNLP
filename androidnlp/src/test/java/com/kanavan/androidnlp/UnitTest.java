@@ -85,4 +85,17 @@ public class UnitTest {
         IMatrix matrix = new Matrix(4, 3, new double[][]{{13.0d, 9.0d, 7.0d, 15.0d}, {8.0d, 7.0d, 4.0d, 6.0d}, {6.0d, 4.0d, 0.0d, 3.0d}});
         assertEquals("[13.0,9.0,7.0,15.0,8.0,7.0,4.0,6.0,6.0,4.0,0.0,3.0]", matrix.flatten().toString());
     }
+
+    @Test
+    public void nearest_neighbor_interpolation() {
+        IMatrix matrix = new Matrix(3, 3, new double[][]{{1.0d, 2.0d, 3.0d}, {4.0d, 5.0d, 6.0d}, {7.0d, 8.0d, 9.0d}});
+        assertEquals("[[1.0,2.0,3.0,3.0],[4.0,5.0,6.0,6.0],[7.0,8.0,9.0,9.0],[7.0,8.0,9.0,9.0]]", NearestNeighborInterpolation.interpolate(matrix, 4, 4).toString());
+    }
+
+    @Test
+    public void convolution() {
+        IMatrix matrix1 = new Matrix(7, 7, new double[][]{{0.0d, 0.0d, 0.0d, 0.0d, 0.0d, 0.0d, 0.0d}, {0.0d, 1.0d, 0.0d, 0.0d, 0.0d, 1.0d, 0.0d}, {0.0d, 0.0d, 0.0d, 0.0d, 0.0d, 0.0d, 0.0d}, {0.0d, 0.0d, 0.0d, 1.0d, 0.0d, 0.0d, 0.0d}, {0.0d, 1.0d, 0.0d, 0.0d, 0.0d, 1.0d, 0.0d}, {0.0d, 0.0d, 1.0d, 1.0d, 1.0d, 0.0d, 0.0d}, {0.0d, 0.0d, 0.0d, 0.0d, 0.0d, 0.0d, 0.0d}});
+        IMatrix matrix2 = new Matrix(3, 3, new double[][]{{0.0d, 0.0d, 1.0d}, {1.0d, 0.0d, 0.0d}, {0.0d, 1.0d, 1.0d}});
+        assertEquals("[[0.0,1.0,0.0,0.0,0.0],[0.0,1.0,1.0,1.0,0.0],[1.0,0.0,0.0,2.0,1.0],[1.0,4.0,2.0,1.0,0.0],[0.0,0.0,1.0,2.0,1.0]]", Convolution.convolve(matrix1, matrix2, 1).toString());
+    }
 }
